@@ -1,19 +1,57 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-BR">
 <head>
-  <meta charset="utf-8">
-  <title>Controle Teste Mesas</title>
+  <meta charset="UTF-8">
+  <title>Simulador Educacional de Opções</title>
   <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
-  <h1>📊 Controle Teste Mesas</h1>
+<div class="container">
 
-  <table id="planilha"></table>
+  <h1>📊 Simulador Educacional de Opções</h1>
 
-  <!-- JS SEMPRE no final -->
-  <script src="script.js"></script>
+  <label>Ativo</label>
+  <select id="ativo">
+    <option>SPY</option><option>SPX</option><option>XSP</option><option>QQQ</option>
+    <option>AAPL</option><option>MSFT</option><option>AMZN</option>
+    <option>GOOGL</option><option>META</option><option>NVDA</option><option>TSLA</option>
+  </select>
 
+  <div class="section">
+    <h2>📈 Gráfico de Contexto</h2>
+    <iframe id="tv"></iframe>
+    <p class="muted">Compare com o gráfico antes de decidir.</p>
+  </div>
+
+  <div class="section">
+    <h2>🧭 Construção Guiada de um Trade</h2>
+
+    <div class="steps">
+      <button class="step active" data-step="1">1️⃣ Ambiente</button>
+      <button class="step" data-step="2">2️⃣ Volatilidade</button>
+      <button class="step" data-step="3">3️⃣ Gráfico</button>
+      <button class="step" data-step="4">4️⃣ Direção</button>
+      <button class="step" data-step="5">5️⃣ Estrutura</button>
+      <button class="step" data-step="6">6️⃣ Strike</button>
+      <button class="step" data-step="7">7️⃣ Validação</button>
+    </div>
+
+    <div id="stepContent" class="guided"></div>
+  </div>
+
+  <div class="section">
+    <h2>📉 Payoff no Vencimento</h2>
+    <canvas id="payoff"></canvas>
+    <div class="legend">🟢 Lucro 🔴 Prejuízo 🟡 Break-even</div>
+  </div>
+
+  <div id="resultado" class="section"></div>
+  <div id="aula" class="guided"></div>
+
+</div>
+
+<script src="script.js"></script>
 </body>
 </html>
