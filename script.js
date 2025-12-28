@@ -1,27 +1,40 @@
-// Identificador único da planilha
-const STORAGE_KEY = "planilha_controle_dolarize_2024";
+const STORAGE_KEY = "planilha_privada";
 
-// Seleciona todas as células
-const cells = document.querySelectorAll("td");
+// Carrega CSV
+fetch("dados.csv")
+  .then(r => r.text())
+  .then(texto => {
+    let dados = JSON.parse(localStorage.getItem(STORAGE_KEY));
 
-// Torna todas editáveis
-cells.forEach((cell, index) => {
-  cell.contentEditable = "true";
-  cell.dataset.cellId = index;
+    if (!dados) {
+      const linhas = texto.trim().split("\n");
+      dados = linhas.map(l => l.split(","));
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(dados));
+    }
 
-  // Restaura valor salvo
-  const saved = localStorage.getItem(STORAGE_KEY + index);
-  if (saved !== null) {
-    cell.innerHTML = saved;
-  }
-
-  // Salva ao editar
-  cell.addEventListener("input", () => {
-    localStorage.setItem(STORAGE_KEY + index, cell.innerHTML);
+    render(dados);
   });
-});
 
-// Proteção simples contra perda acidental
-window.addEventListener("beforeunload", () => {
-  console.log("Dados salvos automaticamente");
-});
+function render(dados) {
+  const table = document.getElementById("planilha");
+  table.innerHTML = "";
+
+  dados.forEach((linha, i) => {
+    const tr = document.createElement("tr");
+
+    linha.forEach((celula, j) => {
+      const td = document.createElement("td");
+      td.contentEditable = true;
+      td.innerText = celula;
+
+      td.addEventListener("input", () => {
+        dados[i][j] = td.innerText;
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(dados));
+      });
+
+      tr.appendChild(td);
+    });
+
+    table.appendChild(tr);
+  });
+}
