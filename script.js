@@ -10,7 +10,7 @@ if (salvo) {
 }
 
 function carregarCSV() {
-  fetch("Controle Teste Mesas.csv")
+  fetch("controle_teste_mesas.csv")
     .then(res => res.text())
     .then(texto => {
       const linhas = texto.trim().split("\n");
