@@ -25,4 +25,3 @@ cells.forEach((cell, index) => {
 window.addEventListener("beforeunload", () => {
   console.log("Dados salvos automaticamente");
 });
-
