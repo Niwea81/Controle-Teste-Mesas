@@ -1,23 +1,14 @@
 body {
-  background: #f4f6f8;
   font-family: Arial, sans-serif;
+  background: #f4f6f8;
 }
 
 table {
   border-collapse: collapse;
+  background: white;
 }
 
 td {
-  cursor: text;
-  transition: background 0.2s;
+  border: 1px solid #ccc;
+  padding: 6px;
 }
-
-td:focus {
-  outline: none;
-  background: #fff7cc;
-}
-
-td:hover {
-  background: #fdfdfd;
-}
-
