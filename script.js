@@ -1,18 +1,20 @@
 const KEY = "planilha_html_usuario";
 const container = document.getElementById("planilha");
 
-// Restaura conteúdo salvo
+// Só restaura se existir algo válido
 const salvo = localStorage.getItem(KEY);
-if (salvo) {
+if (salvo && salvo.length > 50) {
   container.innerHTML = salvo;
 }
 
-// Torna tudo editável
+// Torna textos editáveis (sem quebrar layout)
 container.querySelectorAll("div, span, p").forEach(el => {
   el.contentEditable = "true";
 });
 
-// Salva qualquer alteração
+// Salva somente se houver conteúdo
 container.addEventListener("input", () => {
-  localStorage.setItem(KEY, container.innerHTML);
+  if (container.innerHTML.trim().length > 50) {
+    localStorage.setItem(KEY, container.innerHTML);
+  }
 });
