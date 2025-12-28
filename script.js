@@ -1,46 +1,18 @@
+const KEY = "planilha_html_usuario";
 const table = document.getElementById("planilha");
-const STORAGE_KEY = "planilha_usuario";
 
-// Se o usuário já editou antes, carrega versão salva
-const salvo = localStorage.getItem(STORAGE_KEY);
+// Torna todas as células editáveis
+table.querySelectorAll("td").forEach(td => {
+  td.contentEditable = "true";
+});
+
+// Restaura estado salvo
+const salvo = localStorage.getItem(KEY);
 if (salvo) {
-  render(JSON.parse(salvo));
-} else {
-  carregarCSV();
+  table.innerHTML = salvo;
 }
 
-function carregarCSV() {
-  fetch("controle_teste_mesas.csv")
-    .then(res => res.text())
-    .then(texto => {
-      const linhas = texto.trim().split("\n");
-      const dados = linhas.map(l => l.split(","));
-      render(dados);
-    })
-    .catch(err => {
-      console.error("Erro ao carregar CSV", err);
-    });
-}
-
-function render(dados) {
-  table.innerHTML = "";
-
-  dados.forEach((linha, i) => {
-    const tr = document.createElement("tr");
-
-    linha.forEach((celula, j) => {
-      const td = document.createElement("td");
-      td.contentEditable = true;
-      td.innerText = celula;
-
-      td.addEventListener("input", () => {
-        dados[i][j] = td.innerText;
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(dados));
-      });
-
-      tr.appendChild(td);
-    });
-
-    table.appendChild(tr);
-  });
-}
+// Salva a cada edição
+table.addEventListener("input", () => {
+  localStorage.setItem(KEY, table.innerHTML);
+});
