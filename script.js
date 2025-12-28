@@ -1,22 +1,25 @@
-const STORAGE_KEY = "Controle Teste Mesas.csv";
+const table = document.getElementById("planilha");
+const STORAGE_KEY = "planilha_usuario";
 
-// Carrega CSV
-fetch("Controle Teste Mesas.csv.csv")
-  .then(r => r.text())
-  .then(texto => {
-    let dados = JSON.parse(localStorage.getItem(STORAGE_KEY));
+// Se o usuário já editou antes, carrega versão salva
+const salvo = localStorage.getItem(STORAGE_KEY);
+if (salvo) {
+  render(JSON.parse(salvo));
+} else {
+  carregarCSV();
+}
 
-    if (!dados) {
+function carregarCSV() {
+  fetch("Controle Teste Mesas.csv")
+    .then(res => res.text())
+    .then(texto => {
       const linhas = texto.trim().split("\n");
-      dados = linhas.map(l => l.split(","));
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(dados));
-    }
-
-    render(dados);
-  });
+      const dados = linhas.map(l => l.split(","));
+      render(dados);
+    });
+}
 
 function render(dados) {
-  const table = document.getElementById("planilha");
   table.innerHTML = "";
 
   dados.forEach((linha, i) => {
