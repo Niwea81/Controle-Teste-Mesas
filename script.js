@@ -1,20 +1,18 @@
 const KEY = "planilha_html_usuario";
 const container = document.getElementById("planilha");
-
-// Só restaura se existir algo válido
+// Restaura somente se houver conteúdo válido
 const salvo = localStorage.getItem(KEY);
-if (salvo && salvo.length > 50) {
-  container.innerHTML = salvo;
+if (salvo && salvo.length > 100) {
+container.innerHTML = salvo;
 }
-
-// Torna textos editáveis (sem quebrar layout)
+// Torna texto editável (sem quebrar layout)
 container.querySelectorAll("div, span, p").forEach(el => {
-  el.contentEditable = "true";
+el.contentEditable = "true";
 });
-
-// Salva somente se houver conteúdo
+// Salva alterações com proteção
 container.addEventListener("input", () => {
-  if (container.innerHTML.trim().length > 50) {
-    localStorage.setItem(KEY, container.innerHTML);
-  }
+const html = container.innerHTML.trim();
+if (html.length > 100) {
+localStorage.setItem(KEY, html);
+}
 });
