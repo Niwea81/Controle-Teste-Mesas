@@ -1,7 +1,7 @@
 const STORAGE_KEY = "planilha_privada";
 
 // Carrega CSV
-fetch("dados.csv")
+fetch("Controle Teste Mesas.csv.csv")
   .then(r => r.text())
   .then(texto => {
     let dados = JSON.parse(localStorage.getItem(STORAGE_KEY));
