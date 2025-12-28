@@ -3,9 +3,13 @@ body {
   background: #f4f6f8;
 }
 
+h1 {
+  margin: 20px;
+}
+
 table {
   border-collapse: collapse;
-  margin-top: 20px;
+  margin: 20px;
   background: white;
 }
 
