@@ -5,10 +5,17 @@ body {
 
 table {
   border-collapse: collapse;
+  margin-top: 20px;
   background: white;
 }
 
 td {
   border: 1px solid #ccc;
   padding: 6px;
+  min-width: 80px;
+}
+
+td:focus {
+  background: #fff7cc;
+  outline: none;
 }
