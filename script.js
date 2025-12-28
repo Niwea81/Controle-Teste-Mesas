@@ -16,6 +16,9 @@ function carregarCSV() {
       const linhas = texto.trim().split("\n");
       const dados = linhas.map(l => l.split(","));
       render(dados);
+    })
+    .catch(err => {
+      console.error("Erro ao carregar CSV", err);
     });
 }
 
