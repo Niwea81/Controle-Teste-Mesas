@@ -1,4 +1,4 @@
-const STORAGE_KEY = "planilha_privada";
+const STORAGE_KEY = "Controle Teste Mesas.csv";
 
 // Carrega CSV
 fetch("Controle Teste Mesas.csv.csv")
