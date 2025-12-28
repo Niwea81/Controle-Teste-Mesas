@@ -1,32 +1,536 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-  <meta charset="UTF-8">
-  <title>Controle Teste Mesas</title>
-
-  <!-- CSS externo -->
-  <link rel="stylesheet" href="style.css">
+<meta charset="UTF-8">
+<title>Controle Teste Mesas</title>
+<link rel="stylesheet" href="style.css">
 </head>
-
 <body>
-
-<!-- ⬇️ INÍCIO DO CONTEÚDO ORIGINAL DA PLANILHA -->
 <div id="planilha">
-
-<!--
-AQUI você cola TODO o conteúdo do arquivo
-Controle-Teste-Mesas.txt
-
-⚠️ Cole exatamente como ele é
-⚠️ Não apague nada
-⚠️ Não edite nada
--->
-
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>Simulador Educacional de Opções</title>
+<style>
+body{background:#020617;color:#e5e7eb;font-family:Arial}
+.container{max-width:1200px;margin:30px auto;background:#020024;padding:30px;border-radius:20px}
+h1,h2,h3{color:#facc15;text-align:center}
+label{display:block;margin-top:14px;font-weight:bold}
+input,select{width:100%;padding:10px;margin-top:6px;border-radius:8px;border:none}
+button{margin-top:25px;width:100%;padding:16px;font-size:18px;background:#2563eb;color:white;border:none;border
+.section{margin-top:30px;background:#020617;padding:20px;border-radius:16px}
+.guided{background:#020024;border-left:4px solid #22c55e;padding:18px;margin-top:20px}
+.note{background:#020024;border-left:4px solid #facc15;padding:14px;margin-top:14px}
+canvas{width:100%;height:360px;background:#020024;border-radius:12px}
+.legend{margin-top:10px;font-size:14px}
+iframe{width:100%;height:420px;border:none;border-radius:14px}
+</style>
+</head>
+<body>
+<div class="container">
+<h1>n Simulador Educacional de Opções</h1>
+<label>Ativo</label>
+<select id="ativo" onchange="atualizarGrafico()">
+<option>SPY</option><option>SPX</option><option>XSP</option><option>QQQ</option>
+<option>AAPL</option><option>MSFT</option><option>AMZN</option><option>GOOGL</option>
+<option>META</option><option>NVDA</option><option>TSLA</option>
+</select>
+<div class="section">
+<h2>n Gráfico de Contexto</h2>
+<iframe id="tv"></iframe>
+<p style="color:#94a3b8">Compare com o gráfico antes de decidir.</p>
 </div>
-<!-- ⬆️ FIM DO CONTEÚDO ORIGINAL DA PLANILHA -->
-
-<!-- JS externo -->
+<div class="section">
+<h2>n Construção Guiada de um Trade de Opções</h2>
+<p style="color:#94a3b8">Siga as etapas na ordem. Isso simula o raciocínio de um trader profissional.</p>
+<!-- ETAPAS -->
+<div class="steps">
+<button class="step active" onclick="showStep(1)">1nn Ambiente</button>
+<button class="step" onclick="showStep(2)">2nn Volatilidade</button>
+<button class="step" onclick="showStep(3)">3nn Gráfico</button>
+<button class="step" onclick="showStep(4)">4nn Direção</button>
+<button class="step" onclick="showStep(5)">5nn Estrutura</button>
+<button class="step" onclick="showStep(6)">6nn Strike</button>
+<button class="step" onclick="showStep(7)">7nn Validação</button>
+</div>
+<!-- CONTEÚDO -->
+<div id="stepContent" class="guided"></div>
+</div>
+<style>
+.steps {
+display:grid;
+grid-template-columns:repeat(7,1fr);
+gap:6px;
+margin-top:20px;
+}
+.step {
+padding:10px;
+border-radius:10px;
+background:#020617;
+color:#94a3b8;
+border:1px solid #1e293b;
+cursor:pointer;
+font-size:13px;
+}
+.step.active {
+background:#2563eb;
+color:white;
+font-weight:bold;
+}
+</style>
+<script>
+function showStep(n){
+document.querySelectorAll(".step").forEach((b,i)=>{
+b.classList.toggle("active", i===n-1);
+});
+const content = {
+1: `
+<h3>n Ambiente de Mercado</h3>
+<p>Existe evento econômico relevante hoje (3n)?</p>
+<ul>
+<li>FOMC, CPI, Payroll</li>
+<li>Resultados relevantes</li>
+</ul>
+<p><b>Regra:</b> Ambiente hostil → não forçar trade.</p>
+`,
+2: `
+<h3>nn Volatilidade</h3>
+<p>Antes de CALL ou PUT, avalie:</p>
+<ul>
+<li>IV está baixa, média ou alta?</li>
+<li>IV Rank confirma?</li>
+<li>VIX acima de 20 indica stress</li>
+</ul>
+<p><b>Regra:</b> IV baixa → compra | IV alta → venda</p>
+`,
+3: `
+<h3>n Estrutura do Gráfico</h3>
+<p>O preço está:</p>
+<ul>
+<li>Em tendência?</li>
+<li>Em consolidação?</li>
+<li>Retornando à VWAP?</li>
+</ul>
+<p><b>Regra:</b> Opções sofrem em mercado sem estrutura.</p>
+`,
+4: `
+<h3>n Viés Direcional</h3>
+<p>Somente agora defina:</p>
+<ul>
+<li>Alta</li>
+<li>Baixa</li>
+<li>Neutro</li>
+</ul>
+<p><b>Regra:</b> Direção vem depois do contexto.</p>
+`,
+5: `
+<h3>n Estrutura de Opções</h3>
+<p>Escolha a estrutura, não o strike:</p>
+<ul>
+<li>Compra ou venda?</li>
+<li>Risco definido ou ilimitado?</li>
+<li>Spread ou posição simples?</li>
+</ul>
+<p><b>Aviso:</b> Vendas exigem margem ou ativo.</p>
+`,
+6: `
+<h3>n Strike & Moneyness</h3>
+<p>Agora sim:</p>
+<ul>
+<li>ITM → maior probabilidade</li>
+<li>ATM → equilíbrio</li>
+<li>OTM → menor custo / menor chance</li>
+</ul>
+<p><b>Regra:</b> Strike define probabilidade, não opinião.</p>
+`,
+7: `
+<h3>n Validação Final</h3>
+<ul>
+<li>POP ≥ 70%</li>
+<li>Risco máximo conhecido</li>
+<li>Payoff faz sentido?</li>
+</ul>
+<p style="color:#22c55e"><b>Se tudo ok:</b> Simulação educacional liberada.</p>
+<p style="color:#f87171"><b>Se não:</b> Trade rejeitado.</p>
+`
+};
+document.getElementById("stepContent").innerHTML = content[n];
+}
+showStep(1);
+</script>
+<!-- CHECKLIST EDUCACIONAL -->
+<div class="section">
+<h2>n Checklist Educacional antes da Estrutura</h2>
+<p style="color:#94a3b8">
+Responda com honestidade. O objetivo é aprender a filtrar trades ruins.
+</p>
+<!-- BLOCO 1 -->
+<h3>1nn Contexto de Mercado</h3>
+<label><input type="checkbox" class="chk contexto" value="alta"> Tendência de alta</label>
+<label><input type="checkbox" class="chk contexto" value="baixa"> Tendência de baixa</label>
+<label><input type="checkbox" class="chk contexto" value="lateral"> Mercado lateral / consolidação</label>
+<!-- BLOCO 2 -->
+<h3>2nn Volatilidade & Ambiente</h3>
+<label><input type="checkbox" class="chk vol" value="iv_baixa"> IV abaixo da média histórica</label>
+<label><input type="checkbox" class="chk vol" value="iv_media"> IV próxima da média</label>
+<label><input type="checkbox" class="chk vol" value="iv_alta"> IV acima da média</label>
+<label><input type="checkbox" class="chk vol" value="vix_alto"> VIX acima de 20</label>
+<label><input type="checkbox" class="chk vol" value="evento"> Evento relevante próximo (3n)</label>
+<!-- BLOCO 3 -->
+<h3>3nn Perfil do Trader</h3>
+<label><input type="radio" name="perfil" value="iniciante"> Iniciante</label>
+<label><input type="radio" name="perfil" value="moderado"> Moderado</label>
+<label><input type="radio" name="perfil" value="agressivo"> Agressivo</label>
+<!-- BLOCO 4 -->
+<h3>4nn Consistência</h3>
+<label><input type="checkbox" id="pop70"> POP estimada ≥ 70%</label>
+<label><input type="checkbox" id="risco"> Risco máximo conhecido</label>
+<button onclick="avaliarChecklist()">n Avaliar Checklist</button>
+<div id="feedbackChecklist" class="note" style="display:none"></div>
+</div>
+<script>
+function avaliarChecklist() {
+const feedback = document.getElementById("feedbackChecklist");
+feedback.style.display = "block";
+const contexto = document.querySelectorAll(".contexto:checked").length;
+const volAlta = document.querySelector(".vol[value='iv_alta']")?.checked;
+const evento = document.querySelector(".vol[value='evento']")?.checked;
+const perfil = document.querySelector("input[name='perfil']:checked")?.value;
+const popOk = document.getElementById("pop70").checked;
+const riscoOk = document.getElementById("risco").checked;
+// Regras educacionais
+if (!perfil) {
+feedback.innerHTML = "nn Escolha seu perfil antes de continuar.";
+return;
+}
+if (contexto === 0) {
+feedback.innerHTML = "nn Contexto indefinido. Evite estruturar opções sem viés claro.";
+return;
+}
+if (evento) {
+feedback.innerHTML = "nn Evento relevante próximo. A volatilidade pode mudar tudo.";
+return;
+}
+if (!popOk || !riscoOk) {
+feedback.innerHTML = "n Estrutura reprovada. Probabilidade ou risco insuficientes.";
+return;
+}
+// Sugestões educacionais (sem recomendação)
+let exemplo = "";
+if (perfil === "iniciante") {
+exemplo = `
+n <b>Exemplos educacionais compatíveis:</b><br>
+• Bull Call Spread<br>
+• Bear Put Spread<br>
+• Call comprada ITM<br><br>
+n Evite vendas secas e risco ilimitado.
+`;
+}
+if (perfil === "moderado") {
+exemplo = `
+n <b>Exemplos educacionais compatíveis:</b><br>
+• Debit spreads<br>
+• Call ou Put ATM<br>
+• Estruturas com risco definido
+`;
+}
+if (perfil === "agressivo") {
+exemplo = `
+n <b>Exemplos educacionais compatíveis:</b><br>
+• Put vendida OTM<br>
+• Call vendida coberta<br>
+nn Exige margem, disciplina e controle emocional
+`;
+}
+feedback.innerHTML = `
+n Checklist aprovado para estudo.<br><br>
+${exemplo}
+<br>
+<small>Exemplo educacional. Não constitui recomendação de investimento.</small>
+`;
+}
+</script>
+<label>Preço atual do ativo</label>
+<input id="S" type="number" value="100" oninput="autoStrike()">
+<label>Volatilidade Implícita (%)</label>
+<input id="iv" type="number" value="20">
+<label>Dias até o Vencimento (DTE)</label>
+<input id="dte" type="number" value="7">
+<label>Estrutura</label>
+<select id="estrutura" onchange="ajustarEstrutura();autoStrike()">
+<option value="callLong">Call Comprada</option>
+<option value="putLong">Put Comprada</option>
+<option value="callShort">Call Vendida</option>
+<option value="putShort">Put Vendida</option>
+<option value="bull">Bull Call Spread</option>
+<option value="bear">Bear Put Spread</option>
+</select>
+<div id="riscoEstrutura"></div>
+<div id="single">
+<label>Strike</label>
+<input id="K" type="number" value="100">
+</div>
+<div id="spread" style="display:none">
+<label>Strike Comprado</label>
+<input id="Kbuy" type="number" value="95">
+<label>Strike Vendido</label>
+<input id="Ksell" type="number" value="105">
+</div>
+<button onclick="analisar()">n Analisar</button>
+<div class="section">
+<h2>n Payoff no Vencimento</h2>
+<canvas id="payoff"></canvas>
+<div class="legend">
+n Lucro &nbsp; n Prejuízo &nbsp; n Break-even
+</div>
+</div>
+<div id="resultado" class="section"></div>
+<div id="aula" class="guided"></div>
+</div>
+<script>
+function atualizarGrafico(){
+tv.src=`https://s.tradingview.com/widgetembed/?symbol=${ativo.value}&interval=15&theme=dark`;
+}
+atualizarGrafico();
+function autoStrike(){
+const S0=+S.value;
+const e=estrutura.value;
+if(e.includes("call")) K.value=Math.round(S0*1.01);
+if(e.includes("put")) K.value=Math.round(S0*0.99);
+}
+function ajustarEstrutura(){
+const e=estrutura.value;
+single.style.display=(e!=="bull"&&e!=="bear")?"block":"none";
+spread.style.display=(e==="bull"||e==="bear")?"block":"none";
+let txt={
+callLong:"4n Risco limitado ao prêmio pago.",
+putLong:"4n Risco limitado ao prêmio pago.",
+callShort:"nn Call vendida: risco ilimitado. Exige margem.",
+putShort:"nn Put vendida: risco elevado. Pode exigir compra do ativo.",
+bull:"4n Spread: risco e ganho limitados.",
+bear:"4n Spread: risco e ganho limitados."
+}[e];
+riscoEstrutura.innerHTML=`<div class="note">${txt}</div>`;
+}
+function calcularPOP(S,K,iv,dte){
+const dist=Math.abs(S-K)/S;
+const vol=iv/100*Math.sqrt(dte/365);
+let pop=1-(dist/vol);
+return Math.max(0.05,Math.min(0.95,pop))*100;
+}
+function payoffValor(p,e,s){
+if(e==="callLong") return Math.max(p-s[0],0);
+if(e==="putLong") return Math.max(s[0]-p,0);
+if(e==="callShort") return -Math.max(p-s[0],0);
+if(e==="putShort") return -Math.max(s[0]-p,0);
+if(e==="bull") return Math.max(p-s[0],0)-Math.max(p-s[1],0);
+if(e==="bear") return Math.max(s[1]-p,0)-Math.max(s[0]-p,0);
+}
+function analisar(){
+const S0=+S.value,iv0=+iv.value,dte0=+dte.value,e=estrutura.value;
+let strikes=(e==="bull"||e==="bear")?[+Kbuy.value,+Ksell.value]:[+K.value];
+const pop=calcularPOP(S0,strikes[0],iv0,dte0).toFixed(1);
+desenharPayoff(S0,e,strikes);
+resultado.innerHTML=`
+<h2>n Variáveis da Operação</h2>
+<p><b>IV:</b> ${iv0}%</p>
+<p><b>DTE:</b> ${dte0} dias</p>
+<p><b>POP estimada:</b> ${pop}%</p>
+`;
+aula.innerHTML=`
+<h3>n Aula Guiada</h3>
+<p>Strike não é o preço do ativo.</p>
+<p>POP alta não elimina risco.</p>
+<p>Spreads reduzem volatilidade emocional.</p>
+<p>Gerenciamento vem antes do lucro.</p>
+`;
+}
+function desenharPayoff(S0,e,s){
+const c=payoff,ctx=c.getContext("2d");
+c.width=c.offsetWidth;c.height=360;
+ctx.clearRect(0,0,c.width,c.height);
+const min=S0*0.7,max=S0*1.3;
+const zero=c.height/2;
+ctx.strokeStyle="#facc15";
+ctx.beginPath();ctx.moveTo(0,zero);ctx.lineTo(c.width,zero);ctx.stroke();
+ctx.beginPath();
+for(let x=0;x<=c.width;x++){
+const p=min+(x/c.width)*(max-min);
+const y=zero-payoffValor(p,e,s)*5;
+x===0?ctx.moveTo(x,y):ctx.lineTo(x,y);
+}
+ctx.strokeStyle="#22c55e";
+ctx.stroke();
+}
+ajustarEstrutura();autoStrike();
+</script>
+<div class="note" id="ambienteBox"></div>
+<script>
+function avaliarAmbiente(){
+// valor didático (pode virar input depois)
+const vix = 18;
+let msg="", cor="";
+if(vix < 15){
+msg = "n Ambiente calmo (VIX baixo). Risco controlado.";
+cor = "#22c55e";
+} else if(vix < 20){
+msg = "n Ambiente normal. Atenção à volatilidade.";
+cor = "#facc15";
+} else {
+msg = "n Ambiente estressado (VIX alto). Evite forçar trades.";
+cor = "#ef4444";
+}
+ambienteBox.style.borderLeft = `4px solid ${cor}`;
+ambienteBox.innerHTML = `<b>Ambiente de Mercado</b><br>${msg}<br><small>VIX simulado: ${vix}</small>`;
+}
+avaliarAmbiente();
+</script>
+<div class="note" id="ivBox"></div>
+<script>
+function avaliarIV(){
+const iv = +document.getElementById("iv").value;
+let msg="", cor="";
+if(iv < 18){
+msg = "n IV baixa → volatilidade barata → favorece compras.";
+cor = "#22c55e";
+} else if(iv < 30){
+msg = "n IV média → spreads tendem a funcionar melhor.";
+cor = "#facc15";
+} else {
+msg = "n IV alta → prêmios caros → favorece vendas.";
+cor = "#ef4444";
+}
+ivBox.style.borderLeft = `4px solid ${cor}`;
+ivBox.innerHTML = `<b>Regime de Volatilidade</b><br>${msg}<br><small>IV atual: ${iv}%</small>`;
+}
+document.getElementById("iv").addEventListener("input", avaliarIV);
+avaliarIV();
+</script>
+<div class="guided" id="graficoBox"></div>
+<script>
+function avaliarGrafico(){
+const ativo = document.getElementById("ativo").value;
+graficoBox.innerHTML = `
+<b>Leitura do Gráfico – ${ativo}</b><br>
+Observe no gráfico acima:<br>
+• Tendência ou consolidação<br>
+• Relação com VWAP<br>
+• Topos e fundos<br><br>
+<small>O gráfico define o contexto, não o strike.</small>
+`;
+}
+document.getElementById("ativo").addEventListener("change", avaliarGrafico);
+avaliarGrafico();
+</script>
+<!-- CONTEÚDO -->
+<div id="stepContent" class="guided"></div>
+</div>
+<style>
+.steps {
+display:grid;
+grid-template-columns:repeat(7,1fr);
+gap:6px;
+margin-top:20px;
+}
+.step {
+padding:10px;
+border-radius:10px;
+background:#020617;
+color:#94a3b8;
+border:1px solid #1e293b;
+cursor:pointer;
+font-size:13px;
+}
+.step.active {
+background:#2563eb;
+color:white;
+font-weight:bold;
+}
+</style>
+<script>
+function showStep(n){
+document.querySelectorAll(".step").forEach((b,i)=>{
+b.classList.toggle("active", i===n-1);
+});
+const content = {
+1: `
+<h3>n Ambiente de Mercado</h3>
+<p>Existe evento econômico relevante hoje (3n)?</p>
+<ul>
+<li>FOMC, CPI, Payroll</li>
+<li>Resultados relevantes</li>
+</ul>
+<p><b>Regra:</b> Ambiente hostil → não forçar trade.</p>
+`,
+2: `
+<h3>nn Volatilidade</h3>
+<p>Antes de CALL ou PUT, avalie:</p>
+<ul>
+<li>IV está baixa, média ou alta?</li>
+<li>IV Rank confirma?</li>
+<li>VIX acima de 20 indica stress</li>
+</ul>
+<p><b>Regra:</b> IV baixa → compra | IV alta → venda</p>
+`,
+3: `
+<h3>n Estrutura do Gráfico</h3>
+<p>O preço está:</p>
+<ul>
+<li>Em tendência?</li>
+<li>Em consolidação?</li>
+<li>Retornando à VWAP?</li>
+</ul>
+<p><b>Regra:</b> Opções sofrem em mercado sem estrutura.</p>
+`,
+4: `
+<h3>n Viés Direcional</h3>
+<p>Somente agora defina:</p>
+<ul>
+<li>Alta</li>
+<li>Baixa</li>
+<li>Neutro</li>
+</ul>
+<p><b>Regra:</b> Direção vem depois do contexto.</p>
+`,
+5: `
+<h3>n Estrutura de Opções</h3>
+<p>Escolha a estrutura, não o strike:</p>
+<ul>
+<li>Compra ou venda?</li>
+<li>Risco definido ou ilimitado?</li>
+<li>Spread ou posição simples?</li>
+</ul>
+<p><b>Aviso:</b> Vendas exigem margem ou ativo.</p>
+`,
+6: `
+<h3>n Strike & Moneyness</h3>
+<p>Agora sim:</p>
+<ul>
+<li>ITM → maior probabilidade</li>
+<li>ATM → equilíbrio</li>
+<li>OTM → menor custo / menor chance</li>
+</ul>
+<p><b>Regra:</b> Strike define probabilidade, não opinião.</p>
+`,
+7: `
+<h3>n Validação Final</h3>
+<ul>
+<li>POP ≥ 70%</li>
+<li>Risco máximo conhecido</li>
+<li>Payoff faz sentido?</li>
+</ul>
+<p style="color:#22c55e"><b>Se tudo ok:</b> Simulação educacional liberada.</p>
+<p style="color:#f87171"><b>Se não:</b> Trade rejeitado.</p>
+`
+};
+document.getElementById("stepContent").innerHTML = content[n];
+}
+showStep(1);
+</script>
+</body>
+</html>
+</div>
 <script src="script.js"></script>
-
 </body>
 </html>
