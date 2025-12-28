@@ -1,1 +1,23 @@
+body {
+  background: #f4f6f8;
+  font-family: Arial, sans-serif;
+}
+
+table {
+  border-collapse: collapse;
+}
+
+td {
+  cursor: text;
+  transition: background 0.2s;
+}
+
+td:focus {
+  outline: none;
+  background: #fff7cc;
+}
+
+td:hover {
+  background: #fdfdfd;
+}
 
