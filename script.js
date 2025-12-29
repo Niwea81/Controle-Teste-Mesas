@@ -1,18 +1,18 @@
-const KEY = "planilha_html_usuario";
-const container = document.getElementById("planilha");
-// Restaura somente se houver conteúdo válido
-const salvo = localStorage.getItem(KEY);
-if (salvo && salvo.length > 100) {
-container.innerHTML = salvo;
-}
-// Torna texto editável (sem quebrar layout)
-container.querySelectorAll("div, span, p").forEach(el => {
-el.contentEditable = "true";
+const STORAGE_KEY = "controle_teste_mesas_usuario";
+
+// torna todas as células editáveis
+document.querySelectorAll("td").forEach((td) => {
+  td.contentEditable = true;
 });
-// Salva alterações com proteção
-container.addEventListener("input", () => {
-const html = container.innerHTML.trim();
-if (html.length > 100) {
-localStorage.setItem(KEY, html);
+
+// restaura se houver dados salvos
+const salvo = localStorage.getItem(STORAGE_KEY);
+if (salvo) {
+  document.querySelector(".planilha-container").innerHTML = salvo;
 }
+
+// salva ao editar
+document.addEventListener("input", () => {
+  const html = document.querySelector(".planilha-container").innerHTML;
+  localStorage.setItem(STORAGE_KEY, html);
 });
