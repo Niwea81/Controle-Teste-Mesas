@@ -1,4 +1,4 @@
-const STORAGE_KEY = "controle_teste_mesas_usuario";
+const STORAGE_KEY = "controle_teste_mesas";
 
 // torna todas as células editáveis
 document.querySelectorAll("td").forEach((td) => {
